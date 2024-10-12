@@ -38,6 +38,7 @@ import RegionAdmin from "../pages/Admin/RegionAdmin/RegionAdmin";
 import CinemaAdmin from "../pages/Admin/CinemaAdmin/CinemaAdmin";
 import GenreAdmin from "../pages/Admin/GenreAdmin/GenreAdmin";
 import Genre_Movie from "../pages/Admin/GenreAdmin/Genre_Movie";
+import ActorAdmin from "../pages/Admin/ActorAdmin/ActorAdmin";
 
 
 export default function AppRoutes() {
@@ -106,6 +107,7 @@ export default function AppRoutes() {
               <Route path="cinema" element={<CinemaAdmin />} />
               <Route path="genre" element={<GenreAdmin />} />
               <Route path="genre_movies" element={<Genre_Movie />} />
+              <Route path="actor" element={<ActorAdmin />} />
             </Route>
           </Route>
         </Route>

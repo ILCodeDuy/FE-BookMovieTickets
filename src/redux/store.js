@@ -5,6 +5,7 @@ import { regionsApi } from '../services/Regions/regions.service';
 import { cinemaApi } from '../services/Cinema/cinema.service';
 import { genreApi } from '../services/Genre/genre.service';
 import { genreMovieApi } from '../services/Genre/genre_movies.service';
+import { actorApi } from '../services/Actor/actor.service';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     [cinemaApi.reducerPath]: cinemaApi .reducer,
     [genreApi.reducerPath]: genreApi .reducer,
     [genreMovieApi.reducerPath]: genreMovieApi .reducer,
+    [actorApi.reducerPath]: actorApi .reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -22,7 +24,8 @@ const store = configureStore({
       .concat(regionsApi.middleware)
       .concat(cinemaApi.middleware)
       .concat(genreApi.middleware)
-      .concat(genreMovieApi.middleware),
+      .concat(genreMovieApi.middleware)
+      .concat(actorApi.middleware),
 });
 
 export default store;
