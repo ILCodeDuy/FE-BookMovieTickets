@@ -94,7 +94,6 @@ const Login = () => {
             <div className="rounded-md shadow-sm space-y-4">
               <div className="relative">
                 <label htmlFor="email" className="block text-sm font-medium text-white">Email:</label>
-                <div className="flex items-center">
                 <Input
                   id="email"
                   name="email"
@@ -102,15 +101,13 @@ const Login = () => {
                   autoComplete="email"
                   required
                   onChange={handleChange}
-                  className="w-full p-1 pl-3 rounded-md mt-2 pr-10"
+                  className="w-full p-1 pl-3 text-black rounded-md mt-2 pr-10"
                   placeholder="Email address"
                 />
-                <FaEnvelope className="absolute right-2 mt-2" />
-                </div>
+                <FaEnvelope className="absolute right-2 top-9 text-black" />
               </div>
               <div className="relative">
                 <label htmlFor="password" className="block text-sm font-medium text-white">Mật Khẩu:</label>
-                <div className="flex items-center">
                 <Input
                   id="password"
                   name="password"
@@ -118,18 +115,16 @@ const Login = () => {
                   autoComplete="current-password"
                   required
                   onChange={handleChange}
-                  className="w-full p-1 pl-3 rounded-md mt-2 pr-10"
+                  className="w-full p-1 pl-3 text-black rounded-md mt-2 pr-10"
                   placeholder="Password"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute right-2 mt-2"
+                  className="absolute right-2 top-9 text-black"
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
-                </div>
-                
               </div>
             </div>
             <Button

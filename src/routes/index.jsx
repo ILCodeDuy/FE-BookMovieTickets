@@ -9,6 +9,7 @@ import Dashboard from "../pages/Admin/Dashboard";
 import MovieDetailPage from "../pages/Movies/MoviesDetail";
 import Movie from "../pages/Movie/movie";
 import Actor from "../pages/Actor/Actor";
+import Genre from "../pages/GenreFilm/GenreFilm";
 import Register from "../pages/Auth/Register";
 import Profile from "../pages/Account/Profile";
 import Actordetail from "../pages/Actor/Actordetail";
@@ -16,7 +17,7 @@ import Voucher from "../pages/Voucher/voucher";
 import Transaction from "../pages/Account/Transaction";
 import Login from "../pages/Auth/Login";
 import Auth from "../pages/Auth/Auth";
-
+import VoucherDetail from "../pages/Voucher/voucher-detail";
 // Pages admin
 import MoviesAdmin from "../pages/Admin/MoviesAdmin/MoviesAdmin";
 // import Login from "../pages/Auth/testapi";
@@ -78,6 +79,8 @@ export default function AppRoutes() {
             <Route path="buy-tickets" element={<BuyTickets />} />
             <Route path="cheap-tickets" element={<CheapTicket />} />
             <Route path="voucher" element={<Voucher />} />
+            <Route path="voucher/detail" element={<VoucherDetail />} />
+            <Route path="genrefilm" element={<Genre />} />
           </Route>
         </Route>
 
