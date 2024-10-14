@@ -29,7 +29,7 @@ export const moviesApi = createApi({
 
     getLatestMoviesByCreationDate: builder.query({
       query: () => ({
-        url: '/api/movie/latest-creation',
+        url: '/api/movie/latest',
         method: 'GET',
       }),
     }),
