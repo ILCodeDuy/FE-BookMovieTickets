@@ -9,6 +9,8 @@ import {
 } from "react-icons/fa";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
+import Banner from "../../components/Home/Banner";
+
 const Home = () => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const visibleMoviesCount = 4;
@@ -207,31 +209,13 @@ const Home = () => {
     }
   };
 
-
-
-
   return (
 
     <div className="bg-black text-gray-100">
       <main className="bg-black">
         <section className="relative mb-12 bg-black">
           {/* Banner */}
-          <div className="relative h-screen w-full overflow-hidden">
-            {carouselBanners.map((banner, index) => (
-              <div
-                key={banner.id}
-                className={`absolute inset-0 h-full w-full transition-transform duration-[800ms] ease-in-out ${currentBannerIndex === index
-                    ? "translate-x-0 opacity-100"
-                    : "translate-x-full opacity-0"
-                  }`}
-                style={{
-                  backgroundImage: `url(${banner.bannerUrl})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-            ))}
-          </div>
+          <Banner banners={carouselBanners} currentBannerIndex={currentBannerIndex} />
 
           <div className="absolute top-0 h-screen w-1/2">
             {/* Giới thiệu phim */}
