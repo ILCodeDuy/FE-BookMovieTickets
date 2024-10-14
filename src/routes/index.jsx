@@ -74,7 +74,7 @@ export default function AppRoutes() {
             <Route path="movie" element={<Movie />} />
             <Route path="actor" element={<Actor />} />
             <Route path="actor/detail" element={<Actordetail />} />
-            <Route path="detail" element={<MovieDetailPage />} />
+            <Route path="movie/:id" element={<MovieDetailPage />} />
             <Route path="landingpage" element={<LandingPage />} />
             <Route path="buy-tickets" element={<BuyTickets />} />
             <Route path="cheap-tickets" element={<CheapTicket />} />

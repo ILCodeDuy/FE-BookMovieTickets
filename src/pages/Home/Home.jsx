@@ -418,7 +418,7 @@ const Home = () => {
                 {latestMovies?.data?.slice(0, 1).map((movie) => (
                   <div
                     key={movie._id}
-                    className="relative flex flex-1 flex-col overflow-hidden rounded-lg shadow-lg"
+                    className="group relative flex flex-1 flex-col overflow-hidden rounded-lg shadow-lg"
                     style={{ minHeight: "200px" }}
                   >
                     <img
@@ -430,13 +430,13 @@ const Home = () => {
                       <strong className="block text-xl">{movie.name}</strong>
                     </div>
                     {/* Overlay buttons */}
-                    <div className="overlay-update overlay">
+                    <div className="overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       <div className="button-container flex flex-col space-y-4">
                         <Link
-                          to="/cinema/detail"
+                          to={'/cinema/movie/'+ movie._id}
                           className="overlay-btn-xh w-38 py-2 text-center text-white"
                         >
-                          Trailer <i className="fas fa-video ml-1"></i>
+                          Xem <i className="fas fa-video ml-1"></i>
                         </Link>
                         <Link
                           to="/"
@@ -457,27 +457,27 @@ const Home = () => {
                     key={movie._id}
                     className="m-4 flex w-full flex-col lg:w-1/4"
                   >
-                    <div className="relative flex h-full flex-col overflow-hidden rounded-lg shadow-md">
+                    <div className="group relative flex h-full flex-col overflow-hidden rounded-lg shadow-md">
                       <img
                         src={movie.img}
                         alt={movie.name}
-                        className="w-full object-cover"
+                        className="h-[250px] w-full"
                       />
                       <strong className="block p-2 text-center text-sm transition-colors duration-300 group-hover:text-red-500">
                         {movie.name}
                       </strong>
                       {/* Overlay buttons */}
-                      <div className="overlay-update">
-                        <div className="button-container flex flex-col space-y-2">
+                      <div className="absolute inset-0 flex h-[250px] items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <div className="flex flex-col">
                           <Link
-                            to="/cinema/detail"
-                            className="overlay-btn-xh w-38 rounded bg-blue-500 py-2 text-center text-white hover:bg-blue-600"
+                            to={'/cinema/movie/'+ movie._id}
+                            className="overlay-btn-xh w-38 py-2 text-center text-white"
                           >
-                            Trailer <i className="fas fa-video ml-1"></i>
+                            Xem <i className="fas fa-video ml-1"></i>
                           </Link>
                           <Link
                             to="/"
-                            className="overlay-btn-xh w-38 rounded bg-green-500 py-2 text-center text-white hover:bg-green-600"
+                            className="overlay-btn-xh w-38 py-2 text-center text-white"
                           >
                             Mua vé <i className="fas fa-ticket-alt ml-1"></i>
                           </Link>

@@ -6,10 +6,13 @@ const MovieForm = ({ movieData, onSubmit, onCancel }) => {
     img: '',
     name: '',
     description: '',
+    country: '',
     director: '',
     producer: '',
     duration: '',
-    release_date: ''
+    release_date: '',
+    subtitles: '',
+    age_limit: ''
   });
 
   // Update formData if editing a movie
@@ -58,6 +61,15 @@ const MovieForm = ({ movieData, onSubmit, onCancel }) => {
       />
       <input
         type="text"
+        name="country"
+        value={formData.country}
+        onChange={handleChange}
+        placeholder="Country Name"
+        className="input input-bordered mb-2 w-full"
+        required
+      />
+      <input
+        type="text"
         name="director"
         value={formData.director}
         onChange={handleChange}
@@ -91,6 +103,27 @@ const MovieForm = ({ movieData, onSubmit, onCancel }) => {
         className="input input-bordered mb-2 w-full"
         required
       />
+      <select
+        name="subtitles"
+        value={formData.subtitles}
+        onChange={handleChange}
+        className="select select-bordered mb-2 w-full"
+        required
+      >
+        <option value="">Select Subtitle</option>
+        <option value="Vietsub">Vietsub</option>
+        <option value="Thuyết minh">Thuyết minh</option>
+        <option value="Lồng tiếng">Lồng tiếng</option>
+      </select>
+      <input
+        type="number"
+        name="age_limit"
+        value={formData.age_limit}
+        onChange={handleChange}
+        placeholder="Age Limit"
+        className="input input-bordered mb-2 w-full"
+        min="0"
+      />
       <button type="submit" className="btn btn-primary mr-2 text-white">
         {movieData ? 'Update Movie' : 'Add Movie'}
       </button>
@@ -108,11 +141,14 @@ MovieForm.propTypes = {
     name: PropTypes.string.isRequired,
     img: PropTypes.string,
     description: PropTypes.string.isRequired,
+    country: PropTypes.string.isRequired,
     director: PropTypes.string.isRequired,
     producer: PropTypes.string.isRequired,
-    rating: PropTypes.number.isRequired,
+    rating: PropTypes.number,
     duration: PropTypes.string.isRequired,
     release_date: PropTypes.string.isRequired,
+    subtitles: PropTypes.string,
+    age_limit: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   }),
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
