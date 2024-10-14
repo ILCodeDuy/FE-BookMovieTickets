@@ -49,7 +49,7 @@ const CinemaAdmin = () => {
       <h2 className="text-xl font-bold mb-4">Cinema Management</h2>
 
       {/* Form for adding/editing cinema */}
-      <form onSubmit={handleSubmit} className="mb-6">
+      <form onSubmit={handleSubmit} className="mb-6 text-black">
         <input
           className="input input-bordered mb-2 w-full"
           type="text"
@@ -85,7 +85,7 @@ const CinemaAdmin = () => {
           )}
         </select>
         
-        <button className="btn btn-primary" type="submit">
+        <button className="btn btn-primary text-white" type="submit">
           {editingCinema ? (
             <>
               <FaEdit className="mr-2" /> Update Cinema

@@ -8,9 +8,9 @@ import { useGetAllGenresQuery } from '../../../services/Genre/genre.service';
 import { useGetAllMoviesQuery } from '../../../services/Movies/movies.services';
 
 const Genre_Movie = () => {
-  const { data: movieGenreData, error: movieGenreError, isLoading: movieGenreLoading, refetch } = useGetAllMovieGenreQuery();
-  const { data: genres, error: genreError, isLoading: genreLoading } = useGetAllGenresQuery();
-  const { data: movies, error: movieError, isLoading: movieLoading } = useGetAllMoviesQuery();
+  const { data: movieGenreData, isLoading: movieGenreLoading, refetch } = useGetAllMovieGenreQuery();
+  const { data: genresData, isLoading: genreLoading } = useGetAllGenresQuery();
+  const { data: moviesData, isLoading: movieLoading } = useGetAllMoviesQuery();
 
   const [addGenresToMovie] = useAddGenresToMovieMutation();
   const [removeGenreFromMovie] = useRemoveGenreFromMovieMutation();
@@ -41,7 +41,7 @@ const Genre_Movie = () => {
   };
 
   const handleRemoveGenreFromMovie = async (movieId, genreId) => {
-    if (!movieId) return;
+    if (!movieId || !genreId) return; // Ensure both IDs are present
     try {
       await removeGenreFromMovie({ movieId, genreId }).unwrap();
       setSelectedGenres((prev) => prev.filter((id) => id !== genreId));
@@ -60,14 +60,6 @@ const Genre_Movie = () => {
   };
 
   if (genreLoading || movieLoading || movieGenreLoading) return <div>Loading...</div>;
-  if (genreError || movieError || movieGenreError) return <div>Error fetching data</div>;
-
-  const movieGenre = movieGenreData?.movieGenre || [];
-
-  // Lấy thể loại hiện tại cho phim đã chọn
-  const currentGenres = movieGenre
-    .filter((item) => item.movie_id._id === selectedMovieId)
-    .map((item) => item.genre_id._id);
 
   return (
     <div className="p-6 min-h-screen">
@@ -78,10 +70,10 @@ const Genre_Movie = () => {
         <select
           onChange={(e) => setSelectedMovieId(e.target.value)}
           value={selectedMovieId || ''}
-          className="mt-2 p-2 border border-gray-300 rounded w-full"
+          className="mt-2 p-2 border border-gray-300 rounded w-full text-black"
         >
           <option value="">Chọn một bộ phim</option>
-          {movies?.movies?.items.map((movie) => (
+          {moviesData?.movies?.map((movie) => (
             <option key={movie._id} value={movie._id}>
               {movie.name}
             </option>
@@ -92,7 +84,7 @@ const Genre_Movie = () => {
       <div className="mb-4">
         <h2 className="text-xl font-semibold">Thêm Thể Loại vào Phim</h2>
         <div className="mt-2">
-          {genres?.genres.map((genre) => (
+          {genresData?.genres?.map((genre) => (
             <div key={genre._id} className="flex items-center mb-2">
               <input
                 type="checkbox"
@@ -120,37 +112,16 @@ const Genre_Movie = () => {
         </button>
       </div>
 
-      {selectedMovieId && (
-        <div className="mb-4">
-          <h2 className="text-xl font-semibold">Thể Loại Hiện Tại cho Phim Đã Chọn</h2>
-          <ul className="list-disc pl-5">
-            {currentGenres.map((genreId) => {
-              const genre = genres.genres.find((g) => g._id === genreId);
-              return (
-                <li key={genreId} className="flex justify-between items-center mb-2">
-                  {genre ? genre.name : genreId}
-                  <button
-                    onClick={() => handleRemoveGenreFromMovie(genreId)} // Chỉnh sửa đây
-                    className="ml-4 p-1 bg-red-500 text-white rounded hover:bg-red-600"
-                  >
-                    Xóa
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
 
       <div>
         <h2 className="text-xl font-semibold">Tất Cả Các Mối Quan Hệ Thể Loại-Phim</h2>
         <ul className="list-disc pl-5">
-          {movieGenre.map((item) => (
+          {movieGenreData?.genres.map((item) => (
             <li key={item._id} className="flex justify-between items-center mb-2">
-              Phim: {item.movie_id.name} - Thể loại: {item.genre_id.name}
+              Phim: {item?.movie_id?.name} - Thể loại: {item?.genre_id?.name}
               <div>
                 <button
-                  onClick={() => handleRemoveGenreFromMovie(item.movie_id._id,item.genre_id._id)}
+                  onClick={() => handleRemoveGenreFromMovie(item.movie_id._id, item.genre_id._id)}
                   className="ml-2 p-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Xoá

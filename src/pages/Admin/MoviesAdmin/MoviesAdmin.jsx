@@ -14,9 +14,8 @@ const MoviesAdmin = () => {
 
   // Fetch movies from API using RTK Query
   const { data, error, isLoading, refetch } = useGetAllMoviesQuery();
-  
   // Set movies to an empty array if data is not an array
-  const movies = Array.isArray(data?.movies.items) ? data.movies.items : [];
+  const movies = Array.isArray(data?.movies) ? data.movies : [];
 
   // Hooks for mutations (add, update, delete)
   const [addMovie] = useAddMovieMutation();

@@ -112,7 +112,7 @@ const ActorAdmin = () => {
       <h1 className="mb-5 text-2xl font-bold">Actor Admin</h1>
 
       {/* Add or Edit Actor Form */}
-      <form onSubmit={handleSubmit} className="mb-5" encType="multipart/form-data">
+      <form onSubmit={handleSubmit} className="mb-5 text-black" encType="multipart/form-data">
         <div className="grid grid-cols-2 gap-4">
           <input
             type="text"
@@ -181,7 +181,7 @@ const ActorAdmin = () => {
           />
         </div>
 
-        <div className="mt-4 flex gap-4">
+        <div className="mt-4 flex gap-4 text-white">
           <button type="submit" className="btn btn-primary">
             {editActorId ? "Update Actor" : "Add Actor"}
           </button>

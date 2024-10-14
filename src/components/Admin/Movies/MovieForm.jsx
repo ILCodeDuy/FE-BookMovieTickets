@@ -30,7 +30,7 @@ const MovieForm = ({ movieData, onSubmit, onCancel }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
+    <form onSubmit={handleSubmit} className="mb-4 text-black">
       <input
         type="text"
         name="name"
@@ -91,7 +91,7 @@ const MovieForm = ({ movieData, onSubmit, onCancel }) => {
         className="input input-bordered mb-2 w-full"
         required
       />
-      <button type="submit" className="btn btn-primary mr-2">
+      <button type="submit" className="btn btn-primary mr-2 text-white">
         {movieData ? 'Update Movie' : 'Add Movie'}
       </button>
       <button type="button" className="btn btn-secondary" onClick={onCancel}>

@@ -70,7 +70,7 @@ const GenreAdmin = () => {
       <h2 className="text-xl font-bold mb-4">Quản lý Thể loại</h2>
 
       {/* Form để thêm hoặc chỉnh sửa thể loại */}
-      <div className="mb-4">
+      <div className="mb-4 text-black">
         <input
           type="text"
           className="border p-2 rounded w-full"

@@ -51,7 +51,7 @@ const RegionAdmin = () => {
       {/* Form for adding/editing region */}
       <form onSubmit={handleSubmit} className="mb-6">
         <input
-          className="input input-bordered mb-2 w-full"
+          className="input input-bordered mb-2 w-full text-black"
           type="text"
           placeholder="Region Name"
           value={newRegion.name}
