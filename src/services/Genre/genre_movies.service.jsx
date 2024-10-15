@@ -53,5 +53,4 @@ export const {
   useRemoveGenreFromMovieMutation,
   useGetGenresByMovieQuery,
   useGetMoviesByGenreQuery,
-  usePatchGenresForMovieMutation,
 } = genreMovieApi;

@@ -6,11 +6,24 @@ import { FaHeart, FaStar, FaTicketAlt } from "react-icons/fa";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { useGetLatestMoviesByCreationDateQuery } from "../../services/Movies/movies.services";
 import Banner from "../../components/Home/Banner";
+import Modal_Video from "../../components/Movie/Modal_Video";
 
 const Home = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const visibleMoviesCount = 4;
   const { data: latestMovies } = useGetLatestMoviesByCreationDateQuery();
+
+  const handleTrailerClick = (url) => {
+    setVideoUrl(url);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setVideoUrl("");
+  };
 
   const carouselBanners = [
     {
@@ -427,19 +440,21 @@ const Home = () => {
                       className="w-full object-cover"
                     />
                     <div className="flex flex-1 items-center justify-center p-2">
-                      <strong className="block text-xl">{movie.name}</strong>
+                      <strong className="block p-2 text-center text-xl transition-colors duration-300 group-hover:text-red-500">
+                        {movie.name}
+                      </strong>
                     </div>
                     {/* Overlay buttons */}
                     <div className="overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       <div className="button-container flex flex-col space-y-4">
-                        <Link
-                          to={'/cinema/movie/'+ movie._id}
+                        <button
+                          onClick={() => handleTrailerClick(movie?.url_video)} // Use the movie's trailer URL
                           className="overlay-btn-xh w-38 py-2 text-center text-white"
                         >
-                          Xem <i className="fas fa-video ml-1"></i>
-                        </Link>
+                          Trailer <i className="fas fa-video ml-1"></i>
+                        </button>
                         <Link
-                          to="/"
+                          to={`/cinema/movie/${movie._id}`}
                           className="overlay-btn-xh w-38 py-2 text-center text-white"
                         >
                           Mua vé <i className="fas fa-ticket-alt ml-1"></i>
@@ -448,8 +463,17 @@ const Home = () => {
                     </div>
                   </div>
                 ))}
-              </div>
 
+                {/* Modal to display video */}
+                {isModalOpen && (
+                  <Modal_Video
+                    urlvideo={videoUrl}
+                    isModalOpen={isModalOpen}
+                    handleCloseModal={handleCloseModal}
+                  />
+                )}
+              </div>
+              
               {/* Cột phải: 6 phim, 2 hàng, mỗi hàng 3 box */}
               <div className="flex flex-wrap justify-between lg:w-3/4">
                 {latestMovies?.data?.slice(1, 9).map((movie) => (
@@ -469,14 +493,14 @@ const Home = () => {
                       {/* Overlay buttons */}
                       <div className="absolute inset-0 flex h-[250px] items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <div className="flex flex-col">
+                        <button
+                          onClick={() => handleTrailerClick(movie?.url_video)} // Use the movie's trailer URL
+                          className="overlay-btn-xh w-38 py-2 text-center text-white"
+                        >
+                          Trailer <i className="fas fa-video ml-1"></i>
+                        </button>
                           <Link
-                            to={'/cinema/movie/'+ movie._id}
-                            className="overlay-btn-xh w-38 py-2 text-center text-white"
-                          >
-                            Xem <i className="fas fa-video ml-1"></i>
-                          </Link>
-                          <Link
-                            to="/"
+                            to={"/cinema/movie/" + movie._id}
                             className="overlay-btn-xh w-38 py-2 text-center text-white"
                           >
                             Mua vé <i className="fas fa-ticket-alt ml-1"></i>

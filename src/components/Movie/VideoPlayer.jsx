@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import blurLeft from "../../assets/img/blur/blur-left.7a4f1851.png";
 import blurRight from "../../assets/img/blur/blur-right.52fdcf99.png";
+import Modal_Video from './Modal_Video';
 
 const VideoPlayer = ({ urlvideo, urlvideo_img }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,13 +13,6 @@ const VideoPlayer = ({ urlvideo, urlvideo_img }) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleOutsideClick = (e) => {
-    // Đóng modal khi nhấp ra ngoài khung video
-    if (e.target.classList.contains('modal-overlay')) {
-      handleCloseModal();
-    }
   };
 
   return (
@@ -68,22 +62,11 @@ const VideoPlayer = ({ urlvideo, urlvideo_img }) => {
       </div>
 
       {/* Modal hiển thị video YouTube */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 modal-overlay"
-          onClick={handleOutsideClick}
-        >
-          <div className="relative w-4/5 max-w-5xl aspect-video">
-            <iframe
-              className="w-full h-full rounded-lg border border-gray-600 shadow-lg"
-              src={urlvideo}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            ></iframe>
-          </div>
-        </div>
-      )}
+      <Modal_Video 
+        urlvideo={urlvideo} 
+        isModalOpen={isModalOpen} 
+        handleCloseModal={handleCloseModal} 
+      />
     </div>
   );
 };
