@@ -3,110 +3,72 @@ import { Link, useParams } from "react-router-dom";
 import { FaClock, FaMapMarkerAlt, FaQuoteLeft } from "react-icons/fa";
 import { useGetMovieByIdQuery } from "../../services/Movies/movies.services";
 import { useGetGenresByMovieQuery } from "../../services/Genre/genre_movies.service";
+import { useGetActorsByMovieQuery } from "../../services/Actor/actor_movies.service";
 import { formatDate } from "../../utils/formatDate";
+import notfound_img from "../../assets/img/404/not_found_img.jpg";
 import VideoPlayer from "../../components/Movie/VideoPlayer";
 const MovieDetailPage = () => {
   const { id } = useParams();
   const { data: movieData } = useGetMovieByIdQuery(id);
-  const { data: genre_moviesData} = useGetGenresByMovieQuery(id)
-  console.log(genre_moviesData)
-  const movieDetails = {
-    _id: {
-      $oid: "670750c1514ae3f24c2463fa",
-    },
-    image:
-      "https://i.pinimg.com/564x/d1/34/48/d13448402555953b83d51f82d67e466a.jpg",
-    nameMovie: "Stardust",
-    description:
-      "Một chàng trai trẻ đi vào một thế giới thần tiên để tìm kiếm một ngôi sao đã rơi, và phát hiện ra nhiều điều kỳ diệu.",
-    director: "Matthew Vaughn",
-    price: "68000",
-    actor: "Charlie Cox , SupperLater",
-    producer: "Matthew Vaughn",
-    rating: "7.7/10",
-    genre: "Hành động , Kịch tính",
-    duration: "127 phút",
-    title: "Stardust",
-    agebig: "16+",
-    country: "Mỹ",
-    quote: "Vietsub",
-    release_date: {
-      $date: "2024-10-12T00:00:00.000Z",
-    },
-    __v: 0,
-    hotdeal: "2",
-
-    noidung: (
-      <>
-        Stardust là một bộ phim khoa học viễn tưởng đầy kịch tính do Christopher
-        Nolan đạo diễn. Câu chuyện xoay quanh Dom Cobb, một kẻ đánh cắp những bí
-        mật quan trọng từ những giấc mơ của người khác.
-        <br /> <br />
-        Cobb là một chuyên gia trong lĩnh vực xâm nhập giấc mơ, nơi mà con người
-        có thể bước vào thế giới tâm trí của nhau. Tuy nhiên, cuộc sống của anh
-        bị đảo lộn khi một tổ chức bí mật buộc anh phải thực hiện một nhiệm vụ
-        khó khăn nhất: thay vì đánh cắp một ý tưởng, anh phải cấy ghép một ý
-        tưởng vào tâm trí của một CEO lớn.
-        <br /> <br />
-        Cobb cùng với nhóm đồng đội của mình phải đối mặt với những thử thách
-        khắc nghiệt trong các giấc mơ đa tầng, nơi mà thời gian và không gian
-        trở nên méo mó.
-        <br /> <br />
-        Họ phải chiến đấu không chỉ với kẻ thù bên ngoài mà còn với những cơn ác
-        mộng từ chính quá khứ của Cobb.
-        <br />
-        Inception không chỉ là một hành trình ly kỳ và mạo hiểm, mà còn là một
-        cuộc khám phá sâu sắc về tình yêu, sự mất mát và những rào cản mà con
-        người tự đặt ra cho chính mình.
-      </>
-    ),
-  };
+  const { data: genre_moviesData } = useGetGenresByMovieQuery(id);
+  const { data: actor_moviesData } = useGetActorsByMovieQuery(id);
 
   // Danh sách bình luận (mẫu)
-  const [comments, setComments] = useState([
-    {
-      user: "Xuân Ca",
-      content: "Phim hay quá! Mình rất thích!",
-      time: "2 giờ trước",
-      avatar:
-        "https://i.pinimg.com/564x/ac/9e/3d/ac9e3d7c0f10c0689299701c709c2582.jpg",
-    },
-    {
-      user: "Khúc Thị Hương",
-      content: "Nội dung rất thú vị, diễn xuất xuất sắc.",
-      time: "1 giờ trước",
-      avatar:
-        "https://i.pinimg.com/564x/25/0f/58/250f584d1f12e823d2cc9a4f82d22883.jpg",
-    },
-  ]);
+  // const [comments, setComments] = useState([
+  //   {
+  //     user: "Xuân Ca",
+  //     content: "Phim hay quá! Mình rất thích!",
+  //     time: "2 giờ trước",
+  //     avatar:
+  //       "https://i.pinimg.com/564x/ac/9e/3d/ac9e3d7c0f10c0689299701c709c2582.jpg",
+  //   },
+  //   {
+  //     user: "Khúc Thị Hương",
+  //     content: "Nội dung rất thú vị, diễn xuất xuất sắc.",
+  //     time: "1 giờ trước",
+  //     avatar:
+  //       "https://i.pinimg.com/564x/25/0f/58/250f584d1f12e823d2cc9a4f82d22883.jpg",
+  //   },
+  // ]);
+
   const [activeTab, setActiveTab] = useState("content");
 
+  const handleActorClick = (id) => {
+    console.log(id);
+  };
+  const handleGenreClick = (id) => {
+    console.log(id);
+  };
   const tabs = [
     { id: "content", label: "Nội dung", content: movieData?.movie.description },
     {
-      id: "dashboard",
+      id: "figure",
       label: "Nhân vật",
       content: (
         <>
           <div className="producer">
             <strong className="text-xl">Tác giả : </strong>
-            <span className="underline">{movieDetails.producer}</span>
-          </div>
-          <div className="actor mt-4">
-            <strong className="text-xl">Diễn viên: </strong>
-            {movieDetails.actor.split(" , ").map((acto, index) => {
-              return (
-                <>
-                  <span key={index} className="pr-3 underline">
-                    {acto}
-                  </span>
-                </>
-              );
-            })}
+            <span className="">{movieData?.movie.producer}</span>
           </div>
           <div className="director mt-4">
             <strong className="text-xl">Đạo diễn : </strong>
-            <span className="underline">{movieDetails.director}</span>
+            <span className="">{movieData?.movie.director}</span>
+          </div>
+          <div className="actor mt-6 flex">
+            <strong className="mr-4 text-xl">Diễn viên: </strong>
+            {actor_moviesData?.actors.map((movie) => (
+              <div
+                key={movie._id}
+                className="mr-8 w-32 flex-col items-center text-center"
+              >
+                <img
+                  src={movie.actor_id.img || notfound_img}
+                  alt={movie.actor_id.name}
+                  className="h-32 w-32 rounded-full"
+                />
+                <span className="mt-4">{movie.actor_id.name}</span>
+              </div>
+            ))}
           </div>
         </>
       ),
@@ -116,33 +78,18 @@ const MovieDetailPage = () => {
       label: "Hình ảnh",
       content: (
         <>
-          <strong>Thêm ảnh hoặc bất cứ thứ gì</strong>
-          <img
-            src="https://i.pinimg.com/564x/d4/6a/f9/d46af97765da77d5d04a0ed33a8c3f31.jpg"
-            alt=""
-          />
+          <strong>Một số hình ảnh trong phim</strong>
+          <img src={movieData?.movie.img} alt="" className="w-[200px]" />
         </>
       ),
     },
     {
       id: "invoice",
-      label: "Săn mã giảm ",
+      label: "Mã giảm ",
       content: (
         <>
-          <h1 className="text-center text-xl uppercase">
-            Không có đâu lêu lêu
-          </h1>
           <div className="flex">
-            <img
-              className="mx-auto w-56"
-              src="https://i.pinimg.com/564x/bd/e9/11/bde9119315ada284d54c1c8c50e8b348.jpg"
-              alt=""
-            />
-            <img
-              className="mx-auto w-56"
-              src="https://i.pinimg.com/originals/87/14/4c/87144ca098dad9be40e44907bce4cee3.gif"
-              alt=""
-            />
+            Hiện tại chưa có mã giảm giá dành riêng cho phim
           </div>
         </>
       ),
@@ -152,7 +99,10 @@ const MovieDetailPage = () => {
   return (
     <div className="mt-[88px] min-h-screen bg-black text-white">
       {/* Show video */}
-      <VideoPlayer urlvideo={movieData?.movie.url_video} />
+      <VideoPlayer
+        urlvideo={movieData?.movie.url_video}
+        urlvideo_img={movieData?.movie.img_video}
+      />
 
       <div className="mx-28 grid max-w-[85rem] grid-cols-1 gap-10 py-6 pt-2 md:grid-cols-4">
         {/* left session */}
@@ -192,7 +142,6 @@ const MovieDetailPage = () => {
                     Phim được phổ biến đến người xem ở mọi độ tuổi
                   </p>
                 </div>
-                
               )}
               <div className="mt-4 flex items-center">
                 <svg
@@ -247,7 +196,7 @@ const MovieDetailPage = () => {
                       <button
                         key={movie._id}
                         className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700"
-                        onClick={() => handleCategoryClick(movie.genre_id._id)}
+                        onClick={() => handleGenreClick(movie.genre_id._id)}
                       >
                         {movie?.genre_id.name}
                       </button>
@@ -256,23 +205,20 @@ const MovieDetailPage = () => {
                 </div>
                 <div className="mt-2">
                   <span className="text-white">Đạo diễn:</span>
-                  <button
-                    className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700"
-                    onClick={() => handleCategoryClick(cate)}
-                  >
+                  <button className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700">
                     {movieData?.movie.director}
                   </button>
                 </div>
                 <div className="mt-2">
                   <span className="mr-2 text-white">Diễn viên:</span>
-                  {movieDetails.actor.split(" , ").map((cate, index) => {
+                  {actor_moviesData?.actors.map((movie) => {
                     return (
                       <button
-                        key={index}
+                        key={movie._id}
                         className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700"
-                        onClick={() => handleCategoryClick(cate)}
+                        onClick={() => handleActorClick(movie?.actor_id._id)}
                       >
-                        {cate}
+                        {movie?.actor_id.name}
                       </button>
                     );
                   })}
@@ -283,7 +229,6 @@ const MovieDetailPage = () => {
 
           {/* nội dung  */}
           <div className="sm:hidden">
-            <label className="sr-only">Select your country</label>
             <select
               id="tabs"
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
@@ -322,10 +267,8 @@ const MovieDetailPage = () => {
           </div>
 
           {/* bình luận  */}
-          <div className="max-w-6xl py-5">
+          {/* <div className="max-w-6xl py-5">
             <h2 className="mb-4 text-2xl font-bold">Bình luận</h2>
-
-            {/* ghi bình luận  */}
             <form>
               <label className="sr-only">Your message</label>
               <div className="flex items-center rounded-lg bg-gray-900 px-3 py-2 dark:bg-slate-950">
@@ -397,12 +340,11 @@ const MovieDetailPage = () => {
               </div>
             </form>
 
-            {/* bình luận người dùng  */}
+   
 
             <div>
               {comments.map((comment, index) => (
                 <div className="mt-5 flex items-start gap-2.5" key={index}>
-                  {/* <img className="w-8 h-8 rounded-full" alt="Jese image"> */}
                   <img
                     className="h-12 w-14 rounded-full"
                     src={comment.avatar}
@@ -423,7 +365,7 @@ const MovieDetailPage = () => {
                         {comment.content}{" "}
                       </p>
                     </div>
-                    {/* <span className="text-sm font-normal text-gray-500 dark:text-gray-300">Delivered</span> */}
+                   
                   </div>
                   <button
                     id="dropdownMenuIconButton"
@@ -495,7 +437,7 @@ const MovieDetailPage = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/*  right session */}

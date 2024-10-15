@@ -5,7 +5,7 @@ import {
   useUpdateActorMutation,
   useDeleteActorMutation,
 } from "../../../services/Actor/actor.service";
-
+import notfound_img from "../../../assets/img/404/not_found_img.jpg"
 const ActorAdmin = () => {
   const { data: actors, isLoading, isError, refetch } = useGetAllActorsQuery();
   const [addActor] = useAddActorMutation();
@@ -235,13 +235,11 @@ const ActorAdmin = () => {
               <td>{actor.date_of_birth ? new Date(actor.date_of_birth).toLocaleDateString() : "Đang cập nhật"}</td>
               <td>{actor.nationality}</td>
               <td>
-                {actor.img && (
                   <img
-                    src={actor.img}
+                    src={actor.img || notfound_img}
                     alt={actor.name}
                     className="w-16 h-16 object-cover"
                   />
-                )}
               </td>
               <td>
                 <button

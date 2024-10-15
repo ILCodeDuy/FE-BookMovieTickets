@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import blurLeft from "../../assets/img/blur/blur-left.7a4f1851.png";
 import blurRight from "../../assets/img/blur/blur-right.52fdcf99.png";
 
-const VideoPlayer = ({ urlvideo }) => {
+const VideoPlayer = ({ urlvideo, urlvideo_img }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePlayClick = () => {
@@ -38,7 +38,7 @@ const VideoPlayer = ({ urlvideo }) => {
         <div className="relative">
           <img
             className="h-full w-[860px] rounded-lg border border-gray-600 object-cover shadow-lg md:h-full lg:h-[500px]"
-            src="https://cdn.galaxycine.vn/media/2024/10/2/the-wild-robot-750_1727843732360.jpg"
+            src={urlvideo_img}
             alt="Movie Thumbnail"
           />
           <button
@@ -90,6 +90,7 @@ const VideoPlayer = ({ urlvideo }) => {
 
 VideoPlayer.propTypes = {
   urlvideo: PropTypes.string.isRequired,
+  urlvideo_img: PropTypes.string.isRequired,
 };
 
 export default VideoPlayer;
