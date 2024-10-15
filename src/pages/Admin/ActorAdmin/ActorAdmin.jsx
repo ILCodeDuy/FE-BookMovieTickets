@@ -19,7 +19,7 @@ const ActorAdmin = () => {
   const [newActor, setNewActor] = useState({
     name: "",
     description: "",
-    date_of_birth: "",
+    date_of_birth: "", // Duy trì giá trị trống cho ngày sinh
     nationality: "",
     biography: "",
     height: "",
@@ -35,35 +35,52 @@ const ActorAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if name is empty
+    if (!newActor.name) {
+      alert("Name is required");
+      return;
+    }
+
     // Prepare form data
     const formData = new FormData();
     formData.append("name", newActor.name);
-    formData.append("description", newActor.description);
-    formData.append("date_of_birth", newActor.date_of_birth);
-    formData.append("nationality", newActor.nationality);
-    formData.append("biography", newActor.biography);
-    formData.append("height", newActor.height);
-    
+
+    // Add fields only if they are filled
+    if (newActor.description) {
+      formData.append("description", newActor.description);
+    }
+    if (newActor.date_of_birth) {
+      formData.append("date_of_birth", newActor.date_of_birth);
+    }
+    if (newActor.nationality) {
+      formData.append("nationality", newActor.nationality);
+    }
+    if (newActor.biography) {
+      formData.append("biography", newActor.biography);
+    }
+    if (newActor.height) {
+      formData.append("height", newActor.height);
+    }
+
     if (img) {
       formData.append("img", img); // Main image
     }
-
+    
     sub_img.forEach((sub_img) => {
       formData.append("sub_img", sub_img); // Sub-images
     });
 
-    
     if (editActorId) {
       await updateActor({ id: editActorId, updatedData: formData });
     } else {
-      console.log(formData)
       await addActor(formData);
     }
 
+    // Reset form fields
     setNewActor({
       name: "",
       description: "",
-      date_of_birth: "",
+      date_of_birth: "", // Reset ngày sinh
       nationality: "",
       biography: "",
       height: "",
@@ -80,7 +97,7 @@ const ActorAdmin = () => {
     setNewActor({
       name: actor.name,
       description: actor.description,
-      date_of_birth: actor.date_of_birth,
+      date_of_birth: actor.date_of_birth ? new Date(actor.date_of_birth).toISOString().split("T")[0] : "", // Chuyển đổi định dạng ngày
       nationality: actor.nationality,
       biography: actor.biography,
       height: actor.height,
@@ -121,6 +138,7 @@ const ActorAdmin = () => {
             onChange={handleInputChange}
             placeholder="Actor Name"
             className="input input-bordered w-full"
+            required
           />
           <input
             type="text"
@@ -214,7 +232,7 @@ const ActorAdmin = () => {
             <tr key={actor._id}>
               <td>{actor.name}</td>
               <td>{actor.description}</td>
-              <td>{actor.date_of_birth}</td>
+              <td>{actor.date_of_birth ? new Date(actor.date_of_birth).toLocaleDateString() : "Đang cập nhật"}</td>
               <td>{actor.nationality}</td>
               <td>
                 {actor.img && (

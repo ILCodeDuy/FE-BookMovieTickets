@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaClock, FaMapMarkerAlt, FaQuoteLeft } from "react-icons/fa";
 import { useGetMovieByIdQuery } from "../../services/Movies/movies.services";
+import { useGetGenresByMovieQuery } from "../../services/Genre/genre_movies.service";
 import { formatDate } from "../../utils/formatDate";
 import VideoPlayer from "../../components/Movie/VideoPlayer";
 const MovieDetailPage = () => {
   const { id } = useParams();
   const { data: movieData } = useGetMovieByIdQuery(id);
-
+  const { data: genre_moviesData} = useGetGenresByMovieQuery(id)
+  console.log(genre_moviesData)
   const movieDetails = {
     _id: {
       $oid: "670750c1514ae3f24c2463fa",
@@ -146,11 +148,11 @@ const MovieDetailPage = () => {
       ),
     },
   ];
-  const videoUrl = "https://www.youtube.com/embed/j6VeCxrGY8U";
+
   return (
     <div className="mt-[88px] min-h-screen bg-black text-white">
       {/* Show video */}
-      <VideoPlayer urlvideo={videoUrl}/>
+      <VideoPlayer urlvideo={movieData?.movie.url_video} />
 
       <div className="mx-28 grid max-w-[85rem] grid-cols-1 gap-10 py-6 pt-2 md:grid-cols-4">
         {/* left session */}
@@ -160,7 +162,7 @@ const MovieDetailPage = () => {
             <img
               src={movieData?.movie.img}
               alt={movieData?.movie.name}
-              className="z-10 -mt-32 w-[350px] rounded-lg object-cover shadow-lg md:h-[450px]"
+              className="z-40 -mt-32 w-[350px] rounded-lg object-cover shadow-lg md:h-[450px]"
             />
             <div className="w-full">
               <div className="flex items-end justify-between">
@@ -168,20 +170,29 @@ const MovieDetailPage = () => {
                   {movieData?.movie.name}
                 </h1>
               </div>
-
-              {movieData?.movie.age_limit && (
+              {movieData?.movie.age_limit ? (
                 <div className="age mb-2 mt-2 flex items-center text-sm text-gray-300">
                   <span className="mr-2 rounded-full bg-green-500 p-1 px-2 font-bold text-white">
                     {movieData.movie.age_limit}+
                   </span>
                   <p className="flex items-center">
                     Phim được phổ biến từ người xem{" "}
-                    <p className="mx-1 font-bold text-yellow-300">
+                    <span className="mx-1 font-bold text-yellow-300">
                       {movieData.movie.age_limit}+
-                    </p>{" "}
+                    </span>{" "}
                     tuổi trở lên
                   </p>
                 </div>
+              ) : (
+                <div className="age mb-2 mt-2 flex items-center text-sm text-gray-300">
+                  <span className="mr-2 rounded-full bg-green-500 p-1 px-2 font-bold text-white">
+                    0+
+                  </span>
+                  <p className="flex items-center">
+                    Phim được phổ biến đến người xem ở mọi độ tuổi
+                  </p>
+                </div>
+                
               )}
               <div className="mt-4 flex items-center">
                 <svg
@@ -231,14 +242,14 @@ const MovieDetailPage = () => {
                 </div>
                 <div className="mt-2">
                   <span className="text-white">Thể Loại: </span>
-                  {movieDetails.genre.split(" , ").map((cate, index) => {
+                  {genre_moviesData?.genres.map((movie) => {
                     return (
                       <button
-                        key={index}
+                        key={movie._id}
                         className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700"
-                        onClick={() => handleCategoryClick(cate)}
+                        onClick={() => handleCategoryClick(movie.genre_id._id)}
                       >
-                        {cate}
+                        {movie?.genre_id.name}
                       </button>
                     );
                   })}
