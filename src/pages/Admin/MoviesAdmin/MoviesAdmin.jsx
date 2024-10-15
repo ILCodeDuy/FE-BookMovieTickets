@@ -23,16 +23,16 @@ const MoviesAdmin = () => {
   const [deleteMovie] = useDeleteMovieMutation();
 
   // Handle form submission (for adding or updating a movie)
-  const handleSubmitMovie = async (movie) => {
+  const handleSubmitMovie = async (formDataToSend, isEdit) => {
     try {
-      if (movie._id) {
-        // Update movie
-        await updateMovie({ id: movie._id, updatedData: movie });
+      if (isEdit) {
+        // Nếu đang edit thì cập nhật
+        await updateMovie({ id: formDataToSend.get('id'), updatedData: formDataToSend });
       } else {
-        // Add new movie
-        await addMovie(movie);
+        // Nếu không thì thêm mới
+        await addMovie(formDataToSend);
       }
-      refetch(); // Refresh movie list after changes
+      refetch(); // Refresh danh sách phim sau khi thao tác thành công
       setIsEditing(false);
       setEditingMovie(null);
     } catch (error) {
