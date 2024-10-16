@@ -154,8 +154,7 @@ const MovieDetailPage = () => {
                 <div className="flex items-center">
                   <FaQuoteLeft className="mr-1 text-white" />
                   <span>
-                    {" "}
-                    Ngày phát hành : {formatDate(movieData?.movie.release_date)}
+                    Ngày khởi chiếu : {formatDate(movieData?.movie.release_date)}
                   </span>
                 </div>
               </div>

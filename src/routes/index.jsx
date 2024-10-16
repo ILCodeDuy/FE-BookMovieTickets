@@ -41,6 +41,7 @@ import GenreAdmin from "../pages/Admin/GenreAdmin/GenreAdmin";
 import Genre_Movie from "../pages/Admin/GenreAdmin/Genre_Movie";
 import ActorAdmin from "../pages/Admin/ActorAdmin/ActorAdmin";
 import Actor_Movie from "../pages/Admin/ActorAdmin/Actor_Movie";
+import Admin from "../pages/Admin/Admin";
 
 
 export default function AppRoutes() {
@@ -106,7 +107,8 @@ export default function AppRoutes() {
             element={<PrivateRoute allowedRoles={[ROLE.ADMIN]} />}
           >
             <Route element={<AdminLayout />}>
-              <Route path="" element={<Dashboard />} />
+              <Route path="" element={<Admin />} />
+              <Route path="dashboard" element={<Dashboard />} />
               <Route path="movies" element={<MoviesAdmin />} />
               <Route path="regions" element={<RegionAdmin />} />
               <Route path="cinema" element={<CinemaAdmin />} />

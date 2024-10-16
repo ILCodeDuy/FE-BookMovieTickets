@@ -5,7 +5,7 @@ import { useLoginMutation, useGoogleLoginMutation, useFacebookLoginMutation } fr
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { FacebookProvider, LoginButton } from "react-facebook";
-
+import  Toastify  from "../../helper/Toastify"
 const Login = () => {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
@@ -35,43 +35,52 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       }).unwrap();
-
+  
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("user", JSON.stringify(response.user));
+
+      Toastify("Đăng nhập thành công!", 200);
+      
       navigate(response.user.role === "user" ? "/cinema" : "/admin");
     } catch (error) {
       console.error("Login error:", error);
+      Toastify("Đăng nhập thất bại. Vui lòng thử lại.", 400);
     }
   };
-
+  
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     try {
       const response = await googleLogin({
         token: credentialResponse.credential,
       }).unwrap();
-
+  
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("user", JSON.stringify(response.user));
+      Toastify("Đăng nhập Google thành công!", 200);
       navigate(response.user.role === "user" ? "/cinema" : "/admin");
     } catch (error) {
       console.error("Google login error:", error);
+      Toastify("Đăng nhập Google thất bại. Vui lòng thử lại.", 400);
     }
   };
-
+  
   const handleFacebookResponse = async (response) => {
     try {
       if (response.status === "connected") {
         const { accessToken } = response.authResponse;
-        const fbResponse = await facebookLogin({token: accessToken}).unwrap(); // Send token to the backend
-
+        const fbResponse = await facebookLogin({ token: accessToken }).unwrap();
+  
         localStorage.setItem("accessToken", fbResponse.accessToken);
         localStorage.setItem("user", JSON.stringify(fbResponse.user));
+        Toastify("Đăng nhập Facebook thành công!", 200);
         navigate(fbResponse.user.role === "user" ? "/cinema" : "/admin");
       } else {
         console.error("Facebook login failed:", response);
+        Toastify("Đăng nhập Facebook thất bại. Vui lòng thử lại.", 400);
       }
     } catch (error) {
       console.error("Facebook login error:", error);
+      Toastify("Có lỗi xảy ra khi đăng nhập với Facebook.", 400);
     }
   };
 
