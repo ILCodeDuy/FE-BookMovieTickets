@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaClock, FaMapMarkerAlt, FaQuoteLeft } from "react-icons/fa";
 import { useGetMovieByIdQuery } from "../../services/Movies/movies.services";
 import { useGetGenresByMovieQuery } from "../../services/Genre/genre_movies.service";
@@ -17,12 +17,6 @@ const MovieDetailPage = () => {
 
   const [activeTab, setActiveTab] = useState("content");
 
-  const handleActorClick = (id) => {
-    console.log(id);
-  };
-  const handleGenreClick = (id) => {
-    console.log(id);
-  };
   const tabs = [
     { id: "content", label: "Nội dung", content: movieData?.movie.description },
     {
@@ -46,7 +40,7 @@ const MovieDetailPage = () => {
                 className="mr-8 w-32 flex-col items-center text-center"
               >
                 <img
-                  src={movie.actor_id.img || notfound_img}
+                  src={movie.actor_id.feature_img || notfound_img}
                   alt={movie.actor_id.name}
                   className="h-32 w-32 rounded-full"
                 />
@@ -177,13 +171,13 @@ const MovieDetailPage = () => {
                   <span className="text-white">Thể Loại: </span>
                   {genre_moviesData?.genres.map((movie) => {
                     return (
-                      <button
+                      <Link
+                        to={'/cinema/genrefilm/'+movie.genre_id._id}
                         key={movie._id}
                         className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700"
-                        onClick={() => handleGenreClick(movie.genre_id._id)}
                       >
                         {movie?.genre_id.name}
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -197,13 +191,13 @@ const MovieDetailPage = () => {
                   <span className="mr-2 text-white">Diễn viên:</span>
                   {actor_moviesData?.actors.map((movie) => {
                     return (
-                      <button
+                      <Link
+                        to={'/cinema/actor/'+movie?.actor_id._id}
                         key={movie._id}
                         className="ml-3 rounded border border-gray-700 px-2 py-1 text-white hover:bg-gray-700"
-                        onClick={() => handleActorClick(movie?.actor_id._id)}
                       >
                         {movie?.actor_id.name}
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>

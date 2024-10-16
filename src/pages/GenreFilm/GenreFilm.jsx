@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGetAllGenresQuery } from "../../services/Genre/genre.service";
 import { useGetMoviesByGenreQuery } from "../../services/Genre/genre_movies.service";
 import { useGetAllMoviesQuery } from "../../services/Movies/movies.services";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const MovieList = () => {
+  const { id } = useParams();
   const { data: genreData } = useGetAllGenresQuery();
   const { data: allMoviesData } = useGetAllMoviesQuery();
   const [selectedGenre, setSelectedGenre] = useState("");
   const [visibleCount, setVisibleCount] = useState(4);
+  useEffect(() => {
+    if (id) {
+      setSelectedGenre(id);
+    }
+  }, [id]);
+  
   // Lấy dữ liệu phim theo thể loại khi chọn thể loại
   const { data: moviesByGenreData } = useGetMoviesByGenreQuery(selectedGenre, {
     skip: !selectedGenre, // Bỏ qua nếu không có thể loại được chọn
@@ -31,8 +38,9 @@ const MovieList = () => {
   return (
     <div className="mt-28 bg-gray-900 p-[4.5rem] pt-7 text-white">
       <div className="flex justify-between filter">
-        <div className="menuleft mb-6 flex content-center justify-start gap-10 text-center align-text-top">
-          <h2 className="flex items-center border-l-2 border-red-500 pl-2 text-2xl font-bold uppercase">
+        <div className="menuleft mb-6 flex items-center content-center justify-start gap-10 text-center align-text-top">
+          <h2 className="text-2xl font-bold uppercase">
+          <span className="border-l-4 border-solid border-red-600 mr-2"></span>
             Thể loại phim
           </h2>
 

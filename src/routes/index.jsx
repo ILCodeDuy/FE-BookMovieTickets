@@ -74,7 +74,7 @@ export default function AppRoutes() {
             <Route path="" element={<Home />} />
             <Route path="movie" element={<Movie />} />
             <Route path="actor" element={<Actor />} />
-            <Route path="actor/detail" element={<Actordetail />} />
+            <Route path="actor/:id" element={<Actordetail />} />
             <Route path="movie/:id" element={<MovieDetailPage />} />
             <Route path="landingpage" element={<LandingPage />} />
             <Route path="buy-tickets" element={<BuyTickets />} />
@@ -82,6 +82,7 @@ export default function AppRoutes() {
             <Route path="voucher" element={<Voucher />} />
             <Route path="voucher/detail" element={<VoucherDetail />} />
             <Route path="genrefilm" element={<Genre />} />
+            <Route path="genrefilm/:id" element={<Genre />} />
           </Route>
         </Route>
 

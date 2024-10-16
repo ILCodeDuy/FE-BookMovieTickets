@@ -23,12 +23,6 @@ const Modal_Video = ({ urlvideo, isModalOpen, handleCloseModal }) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>
-            <button 
-              className="absolute top-2 right-2 text-white" 
-              onClick={handleCloseModal}
-            >
-              X
-            </button>
           </div>
         </div>
       )}
