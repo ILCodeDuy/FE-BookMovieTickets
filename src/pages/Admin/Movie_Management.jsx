@@ -1,35 +1,83 @@
 import { useState } from "react";
 import { Button, Input } from "react-daisyui";
-import { useGetAllMoviesQuery } from "../../services/Movies/movies.services";
+import { useGetAllMoviesQuery, useAddMovieMutation, useUpdateMovieMutation, useDeleteMovieMutation } from "../../services/Movies/movies.services";
 import { useGetAllMovieGenreQuery } from "../../services/Genre/genre_movies.service"; // Import all genres query
 import { formatDate } from "../../utils/formatDate";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Import icons
 import { AiOutlineSearch } from "react-icons/ai";
+import MovieForm from "../../components/Admin/Movies/MovieForm";
+import Pagination from "../../components/Admin/Pagination";
+import Toastify from "../../helper/Toastify";
 
 const Movie_Management = () => {
   const { data: movieData } = useGetAllMoviesQuery();
   const { data: movieGenreData } = useGetAllMovieGenreQuery();
+
+  // Khai báo các state
   const [selectedMovies, setSelectedMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [moviesPerPage, setMoviesPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
+  // Khai báo mutations
+  const [addMovie] = useAddMovieMutation();
+  const [updateMovie] = useUpdateMovieMutation();
+  const [deleteMovie] = useDeleteMovieMutation();
+
+   // Lọc phim theo từ khóa tìm kiếm
   const filteredMovies = movieData?.movies.filter((movie) =>
     movie.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const totalPages = Math.ceil((filteredMovies?.length || 0) / moviesPerPage);
 
-  const handleAddMovie = () => {
-    console.log("Thêm phim mới");
+
+  const handleOpenModal = (movie) => {
+    setSelectedMovie(movie);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedMovie(null);
+  };
+
+  const handleSubmit = async (formData, isEdit) => {
+    try {
+      if (isEdit) {
+        // Cập nhật phim
+        await updateMovie({ id: formData.id, data: formData }).unwrap();
+        console.log("Phim đã được cập nhật:", formData);
+      } else {
+        // Thêm phim mới
+        await addMovie(formData).unwrap();
+        console.log("Phim mới đã được thêm:", formData);
+      }
+
+      // Đóng modal sau khi thành công
+      handleCloseModal();
+    } catch (error) {
+      console.error("Có lỗi khi thực hiện thao tác:", error);
+      // Hiển thị thông báo lỗi nếu cần
+    }
   };
 
   const handleEditMovie = (id) => {
-    console.log("Sửa phim có ID:", id);
+    const movieToEdit = movieData.movies.find((movie) => movie._id === id);
+    handleOpenModal(movieToEdit);
   };
 
-  const handleDeleteMovie = (id) => {
-    console.log("Xóa phim có ID:", id);
+  const handleDeleteMovie = async (id) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa phim này?")) {
+      try {
+        await deleteMovie(id).unwrap();
+        console.log("Phim đã được xóa:", id);
+      } catch (error) {
+        console.error("Có lỗi khi xóa phim:", error);
+      }
+    }
   };
 
   const handleSelectMovie = (id) => {
@@ -40,19 +88,24 @@ const Movie_Management = () => {
     );
   };
 
-  const handleDeleteSelectedMovies = () => {
-    console.log("Xóa các phim đã chọn:", selectedMovies);
-    setSelectedMovies([]);
+  const handleDeleteSelectedMovies = async () => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa các phim đã chọn?")) {
+      try {
+        await Promise.all(selectedMovies.map(id => deleteMovie(id).unwrap()));
+        console.log("Đã xóa các phim:", selectedMovies);
+        setSelectedMovies([]);
+      } catch (error) {
+        console.error("Có lỗi khi xóa các phim:", error);
+      }
+    }
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
 
   const handleMoviesPerPageChange = (e) => {
     setMoviesPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -64,13 +117,11 @@ const Movie_Management = () => {
     currentPage * moviesPerPage,
   );
 
-  // Function to get genre names by movie ID
+
   const getGenreNames = (movie) => {
-    // Lọc các thể loại của phim với movie_id truyền vào
     const movieGenreRecords = movieGenreData?.genres.filter(
       (record) => record.movie_id._id === movie._id,
     );
-    // Trả về tên các thể loại hoặc 'Đang cập nhật' nếu không tìm thấy
     return movieGenreRecords.length > 0
       ? movieGenreRecords.map((genre) => genre.genre_id.name).join(", ")
       : "Đang cập nhật";
@@ -82,10 +133,11 @@ const Movie_Management = () => {
         <h3 className="text-2xl font-bold">Quản lý danh sách phim</h3>
         <Button
           className="flex rounded-md bg-red-600 p-2 hover:bg-red-700 hover:brightness-125"
-          onClick={handleAddMovie}
+          onClick={() => handleOpenModal()}
         >
           + Thêm phim
         </Button>
+        
       </div>
 
       <div className="mb-4 flex items-center justify-between">
@@ -198,7 +250,7 @@ const Movie_Management = () => {
                 <td className="px-4 py-2">{formatDate(movie.release_date)}</td>
                 <td className="px-4 py-2">
                   <Button
-                    className="mr-1 rounded-sm bg-[#28ce36] p-2 text-white"
+                    className="mr-1 rounded-sm bg-[#1fff01] p-2 text-white"
                     onClick={() => handleEditMovie(movie._id)}
                   >
                     <FaEdit />
@@ -215,65 +267,17 @@ const Movie_Management = () => {
           </tbody>
         </table>
       </div>
-      <div className="mt-4 flex items-center justify-between">
-        <div>
-          Hiển thị trang {currentPage} / {totalPages}
-        </div>
-        <div className="flex items-center">
-          <Button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-            className=" bg-[#2c2c2c] py-1 px-2 text-white"
-          >
-            Previous
-          </Button>
-
-          <div className="flex">
-            {currentPage > 1 && (
-              <Button
-                onClick={() => handlePageChange(1)}
-                className=" bg-gray-500 text-white"
-              >
-                1
-              </Button>
-            )}
-            {currentPage > 2 && <span className="mx-1">...</span>}
-
-            {Array.from({ length: Math.min(5, totalPages) }, (_, index) => {
-              const pageIndex = Math.max(1, currentPage - 2) + index; // Hiển thị 5 trang gần nhất
-              if (pageIndex > totalPages) return null;
-
-              return (
-                <Button
-                  key={pageIndex}
-                  onClick={() => handlePageChange(pageIndex)}
-                  className={`mx-1 ${currentPage === pageIndex ? "bg-red-600 py-1 px-2 text-white" : "bg-black py-1 px-2 text-red-600"}`}
-                >
-                  {pageIndex}
-                </Button>
-              );
-            })}
-
-            {currentPage < totalPages - 1 && <span className="mx-1">...</span>}
-            {currentPage < totalPages && (
-              <Button
-                onClick={() => handlePageChange(totalPages)}
-                className="bg-gray-500 text-white"
-              >
-                {totalPages}
-              </Button>
-            )}
-          </div>
-
-          <Button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-            className=" bg-black py-1 px-2 text-red-600"
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage} // Update page on change
+      />
+      <MovieForm
+        movieData={selectedMovie}
+        onSubmit={handleSubmit}
+        onCancel={handleCloseModal}
+        isVisible={isModalVisible}
+      />
     </div>
   );
 };
