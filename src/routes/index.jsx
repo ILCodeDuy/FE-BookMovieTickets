@@ -41,7 +41,9 @@ import GenreAdmin from "../pages/Admin/GenreAdmin/GenreAdmin";
 import Genre_Movie from "../pages/Admin/GenreAdmin/Genre_Movie";
 import ActorAdmin from "../pages/Admin/ActorAdmin/ActorAdmin";
 import Actor_Movie from "../pages/Admin/ActorAdmin/Actor_Movie";
-import Admin from "../pages/Admin/Admin";
+import Movie_Management from "../pages/Admin/Movie_Management";
+import Genre_Management from "../pages/Admin/Genre_management";
+import Actor_Management from "../pages/Admin/Actor_Management";
 
 
 export default function AppRoutes() {
@@ -107,15 +109,19 @@ export default function AppRoutes() {
             element={<PrivateRoute allowedRoles={[ROLE.ADMIN]} />}
           >
             <Route element={<AdminLayout />}>
-              <Route path="" element={<Admin />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="movies" element={<MoviesAdmin />} />
-              <Route path="regions" element={<RegionAdmin />} />
-              <Route path="cinema" element={<CinemaAdmin />} />
-              <Route path="genre" element={<GenreAdmin />} />
-              <Route path="genre_movies" element={<Genre_Movie />} />
-              <Route path="actor" element={<ActorAdmin />} />
-              <Route path="actor_movies" element={<Actor_Movie />} />
+              <Route path="" element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />  
+              <Route path="movies" element={<Movie_Management />} />  
+              <Route path="genres" element={<Genre_Management />} />  
+              <Route path="actors" element={<Actor_Management />} />
+
+              <Route path="movies/test" element={<MoviesAdmin />} />
+              <Route path="regions/test" element={<RegionAdmin />} />
+              <Route path="cinema/test" element={<CinemaAdmin />} />
+              <Route path="genre/test" element={<GenreAdmin />} />
+              <Route path="genre_movies/test" element={<Genre_Movie />} />
+              <Route path="actor/test" element={<ActorAdmin />} />
+              <Route path="actor_movies/test" element={<Actor_Movie />} />
             </Route>
           </Route>
         </Route>
