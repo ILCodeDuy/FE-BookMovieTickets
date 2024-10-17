@@ -9,11 +9,12 @@ import notfound_img from "../../assets/img/404/not_found_img.jpg";
 import VideoPlayer from "../../components/Movie/VideoPlayer";
 import NowShowing from "../../components/Movie/NowShowing";
 import CommentsSection from "../../components/Movie/CommentsSection";
+import LoadingLocal from "../Loading/LoadingLocal";
 const MovieDetailPage = () => {
   const { id } = useParams();
-  const { data: movieData } = useGetMovieByIdQuery(id);
-  const { data: genre_moviesData } = useGetGenresByMovieQuery(id);
-  const { data: actor_moviesData } = useGetActorsByMovieQuery(id);
+  const { data: movieData, isLoading: movieDataLoading  } = useGetMovieByIdQuery(id);
+  const { data: genre_moviesData, isLoading: genre_moviesDataLoading } = useGetGenresByMovieQuery(id);
+  const { data: actor_moviesData, isLoading: actor_moviesDataLoaing } = useGetActorsByMovieQuery(id);
 
   const [activeTab, setActiveTab] = useState("content");
 
@@ -73,6 +74,10 @@ const MovieDetailPage = () => {
       ),
     },
   ];
+
+  if(movieDataLoading || genre_moviesDataLoading || actor_moviesDataLoaing){
+    return <LoadingLocal/>
+  }
 
   return (
     <div className="mt-[88px] min-h-screen bg-black text-white">

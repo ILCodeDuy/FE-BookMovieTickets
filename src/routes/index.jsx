@@ -19,7 +19,6 @@ import Login from "../pages/Auth/Login";
 import Auth from "../pages/Auth/Auth";
 import VoucherDetail from "../pages/Voucher/voucher-detail";
 // Pages admin
-import MoviesAdmin from "../pages/Admin/MoviesAdmin/MoviesAdmin";
 // import Login from "../pages/Auth/testapi";
 import LandingPage from "../pages/LandingPage/LandingPage";
 
@@ -39,7 +38,7 @@ import RegionAdmin from "../pages/Admin/RegionAdmin/RegionAdmin";
 import CinemaAdmin from "../pages/Admin/CinemaAdmin/CinemaAdmin";
 import GenreAdmin from "../pages/Admin/GenreAdmin/GenreAdmin";
 import Genre_Movie from "../pages/Admin/GenreAdmin/Genre_Movie";
-import ActorAdmin from "../pages/Admin/ActorAdmin/ActorAdmin";
+// import ActorAdmin from "../pages/Admin/ActorAdmin/ActorAdmin";
 import Actor_Movie from "../pages/Admin/ActorAdmin/Actor_Movie";
 import Movie_Management from "../pages/Admin/Movie_Management";
 import Genre_Management from "../pages/Admin/Genre_management";
@@ -115,12 +114,10 @@ export default function AppRoutes() {
               <Route path="genres" element={<Genre_Management />} />  
               <Route path="actors" element={<Actor_Management />} />
 
-              <Route path="movies/test" element={<MoviesAdmin />} />
               <Route path="regions/test" element={<RegionAdmin />} />
               <Route path="cinema/test" element={<CinemaAdmin />} />
               <Route path="genre/test" element={<GenreAdmin />} />
               <Route path="genre_movies/test" element={<Genre_Movie />} />
-              <Route path="actor/test" element={<ActorAdmin />} />
               <Route path="actor_movies/test" element={<Actor_Movie />} />
             </Route>
           </Route>

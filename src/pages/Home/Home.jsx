@@ -7,13 +7,14 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { useGetLatestMoviesByCreationDateQuery } from "../../services/Movies/movies.services";
 import Banner from "../../components/Home/Banner";
 import Modal_Video from "../../components/Movie/Modal_Video";
+import LoadingLocal from "../Loading/LoadingLocal";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const visibleMoviesCount = 4;
-  const { data: latestMovies } = useGetLatestMoviesByCreationDateQuery();
+  const { data: latestMovies, isLoading: latestMoviesLoading } = useGetLatestMoviesByCreationDateQuery();
 
   const handleTrailerClick = (url) => {
     setVideoUrl(url);
@@ -222,6 +223,10 @@ const Home = () => {
       container.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
+
+  if(latestMoviesLoading){
+    return <LoadingLocal />
+  }
 
   return (
     <div className="bg-black text-gray-100">

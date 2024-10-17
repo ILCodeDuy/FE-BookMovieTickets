@@ -27,7 +27,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               onClick={() => handlePageChange(1)}
               className="bg-gray-500 text-white"
             >
-              1
             </Button>
           )}
           {currentPage > 2 && <span className="mx-1">...</span>}
@@ -57,7 +56,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               onClick={() => handlePageChange(totalPages)}
               className="bg-gray-500 text-white"
             >
-              {totalPages}
             </Button>
           )}
         </div>

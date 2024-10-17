@@ -1,19 +1,27 @@
 import { useState } from "react";
 import { Button, Input } from "react-daisyui";
-import { useGetAllMoviesQuery, useAddMovieMutation, useUpdateMovieMutation, useDeleteMovieMutation } from "../../services/Movies/movies.services";
-import { useGetAllMovieGenreQuery } from "../../services/Genre/genre_movies.service"; // Import all genres query
+import {
+  useGetAllMoviesQuery,
+  useAddMovieMutation,
+  useUpdateMovieMutation,
+  useDeleteMovieMutation,
+} from "../../services/Movies/movies.services";
+import { useGetAllMovieGenreQuery } from "../../services/Genre/genre_movies.service";
 import { formatDate } from "../../utils/formatDate";
-import { FaEdit, FaTrash } from "react-icons/fa"; // Import icons
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
 import MovieForm from "../../components/Admin/Movies/MovieForm";
 import Pagination from "../../components/Admin/Pagination";
 import Toastify from "../../helper/Toastify";
+import LoadingLocal from "../Loading/LoadingLocal";
+import LoadingPage from "../Loading/LoadingSpinner";
 
 const Movie_Management = () => {
-  const { data: movieData } = useGetAllMoviesQuery();
-  const { data: movieGenreData } = useGetAllMovieGenreQuery();
+  const { data: movies, isLoading: movieDataLoading , refetch } = useGetAllMoviesQuery();
+  const { data: movieGenreData, isLoading: movieGenreDataLoading } = useGetAllMovieGenreQuery();
 
   // Khai báo các state
+  const [loading, setLoading] = useState(false);
   const [selectedMovies, setSelectedMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [moviesPerPage, setMoviesPerPage] = useState(5);
@@ -26,13 +34,12 @@ const Movie_Management = () => {
   const [updateMovie] = useUpdateMovieMutation();
   const [deleteMovie] = useDeleteMovieMutation();
 
-   // Lọc phim theo từ khóa tìm kiếm
-  const filteredMovies = movieData?.movies.filter((movie) =>
+  // Lọc phim theo từ khóa tìm kiếm
+  const filteredMovies = movies?.data.filter((movie) =>
     movie.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const totalPages = Math.ceil((filteredMovies?.length || 0) / moviesPerPage);
-
 
   const handleOpenModal = (movie) => {
     setSelectedMovie(movie);
@@ -46,36 +53,45 @@ const Movie_Management = () => {
 
   const handleSubmit = async (formData, isEdit) => {
     try {
+      setLoading(true)
       if (isEdit) {
-        // Cập nhật phim
-        await updateMovie({ id: formData.id, data: formData }).unwrap();
-        console.log("Phim đã được cập nhật:", formData);
+        // Gửi id và formData trực tiếp
+        await updateMovie({ id: formData.get("id"), updatedData: formData }).unwrap();
+        refetch();
+        Toastify("Phim đã được cập nhật:", 200);
       } else {
         // Thêm phim mới
         await addMovie(formData).unwrap();
-        console.log("Phim mới đã được thêm:", formData);
+        refetch();
+        Toastify("Phim mới đã được thêm:", 200);
       }
-
       // Đóng modal sau khi thành công
       handleCloseModal();
     } catch (error) {
       console.error("Có lỗi khi thực hiện thao tác:", error);
-      // Hiển thị thông báo lỗi nếu cần
+      Toastify("Có lỗi xảy ra! Vui lòng thử lại.", 400);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleEditMovie = (id) => {
-    const movieToEdit = movieData.movies.find((movie) => movie._id === id);
+    const movieToEdit = movies?.data.find((movie) => movie._id === id);
     handleOpenModal(movieToEdit);
   };
 
   const handleDeleteMovie = async (id) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa phim này?")) {
       try {
+        setLoading(true);
         await deleteMovie(id).unwrap();
-        console.log("Phim đã được xóa:", id);
+        refetch();
+        Toastify("Phim đã được xóa:", 200);
       } catch (error) {
         console.error("Có lỗi khi xóa phim:", error);
+        Toastify("Có lỗi xảy ra! Vui lòng thử lại.", 400);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -91,21 +107,20 @@ const Movie_Management = () => {
   const handleDeleteSelectedMovies = async () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa các phim đã chọn?")) {
       try {
-        await Promise.all(selectedMovies.map(id => deleteMovie(id).unwrap()));
-        console.log("Đã xóa các phim:", selectedMovies);
+        await Promise.all(selectedMovies.map((id) => deleteMovie(id).unwrap()));
+        refetch();
+        Toastify("Đã xóa các phim:", 200);
         setSelectedMovies([]);
       } catch (error) {
-        console.error("Có lỗi khi xóa các phim:", error);
+        Toastify("Có lỗi khi xóa các phim:", 400);
       }
     }
   };
-
 
   const handleMoviesPerPageChange = (e) => {
     setMoviesPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
-
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -117,15 +132,22 @@ const Movie_Management = () => {
     currentPage * moviesPerPage,
   );
 
-
   const getGenreNames = (movie) => {
-    const movieGenreRecords = movieGenreData?.genres.filter(
-      (record) => record.movie_id._id === movie._id,
+    const movieGenreRecords = movieGenreData?.genres?.filter(
+      (record) => record?.movie_id?._id === movie._id,
     );
-    return movieGenreRecords.length > 0
+    return movieGenreRecords?.length > 0
       ? movieGenreRecords.map((genre) => genre.genre_id.name).join(", ")
       : "Đang cập nhật";
   };
+
+  if(movieDataLoading || movieGenreDataLoading){
+    return <LoadingLocal />
+  }
+  if(loading){
+    return <LoadingPage loading={loading}/>
+  }
+
 
   return (
     <div className="ml-64 mt-8 bg-[#111111] p-6">
@@ -137,7 +159,6 @@ const Movie_Management = () => {
         >
           + Thêm phim
         </Button>
-        
       </div>
 
       <div className="mb-4 flex items-center justify-between">
@@ -208,10 +229,10 @@ const Movie_Management = () => {
               <th className="px-4 py-3 text-left text-white">Phim</th>
               <th className="px-4 py-3 text-left text-white">Mô tả</th>
               <th className="px-4 py-3 text-left text-white">Thể loại</th>
-              <th className="px-4 py-3 text-left text-white">
+              <th className="px-4 py-3 text-white text-center">
                 Ngày khởi chiếu
               </th>
-              <th className="px-4 py-3 text-left text-white">Hành động</th>
+              <th className="px-4 py-3 text-center text-white">Hành động</th>
             </tr>
           </thead>
           <tbody className="bg-black text-gray-400">
@@ -243,12 +264,12 @@ const Movie_Management = () => {
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 w-[20%]">
                   {movie.description.slice(0, 50) + "..."}
                 </td>
-                <td className="px-4 py-2">{getGenreNames(movie)}</td>
-                <td className="px-4 py-2">{formatDate(movie.release_date)}</td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 w-[15%]">{getGenreNames(movie)}</td>
+                <td className="px-4 py-2 text-center">{formatDate(movie.release_date)}</td>
+                <td className="px-4 py-2 text-center">
                   <Button
                     className="mr-1 rounded-sm bg-[#1fff01] p-2 text-white"
                     onClick={() => handleEditMovie(movie._id)}
@@ -270,7 +291,7 @@ const Movie_Management = () => {
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage} // Update page on change
+        onPageChange={setCurrentPage}
       />
       <MovieForm
         movieData={selectedMovie}
