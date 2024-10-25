@@ -28,15 +28,16 @@ const Profile = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  
   // Function to handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo({ ...userInfo, [name]: value });
-  };
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setUserInfo({ ...userInfo, [name]: value });
+//   };
+  
 
     return (
-        <div className="p-28 px-20">
+        <div className="p-28 px-20 text-white">
             <h1 className="text-3xl pb-4 uppercase font-semibold">Thông tin cá nhân</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16"> 
             <div className="bg-slate-900 p-6 rounded-lg shadow-lg " style={{boxShadow: '0 4px 20px rgba(255, 255, 255, 0.5)',}} >
@@ -108,7 +109,7 @@ const Profile = () => {
                         <a href="mailto:nqtuan1123@gmail.com" className="text-blue-600">nqtuan1123@gmail.com</a>
                     </div>
                     <div>
-                        <span an className="text-gray-400">&gt;</span>
+                        <span className="text-gray-400">&gt;</span>
                     </div>
                 </div>
                 <hr style={{ borderTop: '1px solid rgba(255, 255, 255, 0.2)', height: '1px' }} className="my-3" />
@@ -126,16 +127,20 @@ const Profile = () => {
                 <div className="col-span-2">
                     <div className="">
                     <ul className="flex flex-row justify-center space-x-6 text-sm font-medium text-gray-500 dark:text-gray-400 md:me-4 mb-6 md:mb-0">
-                        {['profile','history', 'whislist',  'Notification', 'gift'].map(tab => (
+                        {['profile', 'history', 'whislist', 'Notification', 'gift'].map((tab) => (
                             <li key={tab} className="relative flex flex-col items-center">
                                 <a
                                     href="#"
                                     className={`inline-flex items-center text-xl ${activeTab === tab ? 'text-white' : 'text-gray-400'} rounded-lg`}
                                     onClick={() => handleTabChange(tab)}
                                 >
-                                    {tab === 'profile' ? 'Thông tin' :tab === 'history' ? 'Lịch sử giao dịch' : tab === 'gift' ? 'Quà tặng' : tab === 'whislist' ? 'Yêu thích' :  tab === 'Notification' ? 'Thông báo' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                    {tab === 'profile' ? 'Thông tin' : 
+                                    tab === 'history' ? 'Lịch sử giao dịch' : 
+                                    tab === 'gift' ? 'Quà tặng' : 
+                                    tab === 'whislist' ? 'Yêu thích' :  
+                                    tab === 'Notification' ? 'Thông báo' : 
+                                    tab.charAt(0).toUpperCase() + tab.slice(1)}
                                 </a>
-                                {/* Gạch chân */}
                                 {activeTab === tab && (
                                     <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1/4 h-0.5 bg-white rounded"></div>
                                 )}
@@ -155,7 +160,7 @@ const Profile = () => {
                                         <div>
                                             <label className="block text-sm font-medium text-white">Họ và tên</label>
                                             <div className="flex items-center mt-1 bg-gray-100 p-2 rounded">
-                                            <span className="material-icons text-gray-900"><i class="fa-solid fa-user"></i></span>
+                                            <span className="material-icons text-gray-900"><i className="fa-solid fa-user"></i></span>
                                             <input
                                                 type="text"
                                                 value="Tuấn Nguyễn"
@@ -167,7 +172,7 @@ const Profile = () => {
                                         <div>
                                             <label className="block text-sm font-medium text-white">Ngày sinh</label>
                                             <div className="flex items-center mt-1 bg-gray-100 p-2 rounded">
-                                            <span className="material-icons text-gray-900"><i class="fa-regular fa-calendar"></i></span>
+                                            <span className="material-icons text-gray-900"><i className="fa-regular fa-calendar"></i></span>
                                             <input
                                                 type="text"
                                                 value="03/12/2004"
@@ -183,7 +188,7 @@ const Profile = () => {
                                         <div>
                                             <label className="block text-sm font-medium text-white">Email</label>
                                             <div className="flex items-center mt-1 bg-gray-100 p-2 rounded">
-                                            <span className="material-icons text-gray-900"><i class="fa-solid fa-envelope"></i></span>
+                                            <span className="material-icons text-gray-900"><i className="fa-solid fa-envelope"></i></span>
                                             <input
                                                 type="email"
                                                 value="nqtuan1123@gmail.com"
@@ -196,7 +201,7 @@ const Profile = () => {
                                         <div>
                                             <label className="block text-sm font-medium text-white">Phone</label>
                                             <div className="flex items-center mt-1 bg-gray-100 p-2 rounded">
-                                            <span className="material-icons text-gray-900"><i class="fa-solid fa-phone"></i></span>
+                                            <span className="material-icons text-gray-900"><i className="fa-solid fa-phone"></i></span>
                                             <input
                                                 type="text"
                                                 value="0376395095"
@@ -229,7 +234,7 @@ const Profile = () => {
                                         <div>
                                             <label className="block text-sm font-medium text-white">Mật khẩu</label>
                                             <div className="flex items-center mt-1 bg-gray-100 p-2 rounded">
-                                            <span className="material-icons text-gray-500"><i class="fa-solid fa-lock"></i></span>
+                                            <span className="material-icons text-gray-500"><i className="fa-solid fa-lock"></i></span>
                                             <input
                                                 type="password"
                                                 value="********"

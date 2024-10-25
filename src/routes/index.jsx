@@ -13,6 +13,11 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import PrivateRoute from "./private/PrivateRoute/PrivateRoute";
 import { NotLoggedMiddleware } from "./private/middleware/MiddlewareRoute";
 
+
+import Region_Manager from "../pages/Admin/Region_Manager";
+import RegionDetails from "../pages/Admin/Region_detail";
+
+
 // Lazy-loaded pages
 const Home = lazy(() => import("../pages/Home/Home"));
 const Dashboard = lazy(() => import("../pages/Admin/Dashboard"));
@@ -67,6 +72,7 @@ export default function AppRoutes() {
             </Route>
           </Route>
 
+
           {/* Public routes */}
           <Route element={<DefaultLayout />}>
             <Route path="/cinema" element={<UserLayout />}>
@@ -77,6 +83,7 @@ export default function AppRoutes() {
               <Route path="movie/:id" element={<MovieDetailPage />} />
               <Route path="landingpage" element={<LandingPage />} />
               <Route path="buy-tickets" element={<BuyTickets />} />
+              <Route path="buy-tickets/:id" element={<BuyTickets />} />
               <Route path="cheap-tickets" element={<CheapTicket />} />
               <Route path="voucher" element={<Voucher />} />
               <Route path="voucher/detail" element={<VoucherDetail />} />
@@ -116,6 +123,9 @@ export default function AppRoutes() {
                 <Route path="genre_movies/test" element={<Genre_Movie />} />
                 <Route path="actor/test" element={<ActorAdmin />} />
                 <Route path="actor_movies/test" element={<Actor_Movie />} />
+                <Route path="region" element={<Region_Manager />} />
+                <Route path="region/:region_id" element={<RegionDetails />} />
+
               </Route>
             </Route>
           </Route>
